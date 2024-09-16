@@ -24,6 +24,7 @@ function wp_captureAltTitle_page() {
 	?>
 		<div class="wp-capture-alt-title-wrapper">
 			<h1>WP Capture Title and alt text.</h1>
+			<button>click me</button>
 		</div>
 
 	<?php

@@ -3,11 +3,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
 	entry: {
-		scripts: './assets/src/js/admin-script.js'
+		scripts: './assets/src/js/main-script.js'
 	},
 	output: {
 		path: path.resolve(__dirname, 'assets/build'),
-		filename: 'admin-[name].js'
+		filename: 'main-[name].js'
 	},
 	module: {
 		rules:[
@@ -32,7 +32,7 @@ module.exports = {
 	},
 	plugins: [
 		new MiniCssExtractPlugin({
-			filename: 'admin-style.css'
+			filename: 'main-style.css'
 		})
 	],
 	mode: 'development',

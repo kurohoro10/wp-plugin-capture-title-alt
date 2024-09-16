@@ -15,13 +15,13 @@
 // Your code starts here.
 defined('ABSPATH') or die('No script kiddies please!');
 
-add_action( 'admin_enqueue_scripts', 'wp_captureAltTitle_scripts' );
+add_action( 'wp_enqueue_scripts', 'wp_captureAltTitle_scripts' );
 
 function wp_captureAltTitle_scripts() {
-	wp_enqueue_style('wp-capture-admin-style', plugins_url('assets/build/admin-style.css', __FILE__));
-	wp_enqueue_script('wp-capture-admin-script', plugins_url('assets/build/admin-scripts.js', __FILE__), array('jquery'), null, true);
+	wp_enqueue_style('wp-capture-style', plugins_url('assets/build/main-style.css', __FILE__));
+	wp_enqueue_script('wp-capture-script', plugins_url('assets/build/main-scripts.js', __FILE__), array('jquery'), null, true);
 
-	wp_localize_script('wp-captureAltTitle-script', 'wpCaptureAltTitle', array(
+	wp_localize_script('wp-capture-script', 'wpCaptureAltTitle', array(
 		'pluginUrl' => admin_url('admin-ajax.php'),
 		'nonce' => wp_create_nonce('wpCaptureAltTitle')
 	));
