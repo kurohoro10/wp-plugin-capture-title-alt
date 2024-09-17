@@ -1,35 +1,95 @@
 import '../css/main-style.css';
 document.addEventListener('DOMContentLoaded', () => {
-	const images = document.querySelectorAll('.catch-img-alt-title');
+	const pluginUrl = wpCaptureAltTitle.pluginUrl;
+	const nonce = wpCaptureAltTitle.nonce;
+	const ajaxUrl = 'admin-ajax.php';
+	let userRoleforCaptureTitleAlt = wpCaptureAltTitle.role;
+	let captureImageTitleAlt_title;
+	let captureImageTitleAlt_altText;
+	let captureImageTitleAlt_imgSrc;
 
-	if (images) {
-		images.forEach(img => {
-			const parentElement = img.parentElement;
-			let title = parentElement.previousElementSibling;
-			let par = parentElement.nextElementSibling;
-			let img_alt = parentElement.children[0].getAttribute('alt');
-			let img_title = parentElement.children[0].getAttribute('title');
+	if (userRoleforCaptureTitleAlt === 'administrator') {
+		const captureImgs = document.querySelectorAll('main.content img');
 
-			while(title && (!['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(title.tagName) || !title.textContent.trim())){
-				title.previousElementSibling;
-			}
+		captureImgs.forEach(el => {
+			const btn = document.createElement('button');
+			btn.classList.add('capture-image-title-alt', 'captureImageTitleAltBtn');
+			btn.textContent = 'Capture Alt Title';
 
-			while (par && (par.tagName !== 'P' || !par.textContent.trim())) {
-				par = par.nextElementSibling;
-			}
+			el.parentElement.append(btn);
 
-			console.log(parentElement.children[0].title);
+			btn.addEventListener('click', () => {
+				captureImageTitleAlt_title = el.parentElement.previousElementSibling.textContent;
+				captureImageTitleAlt_altText = el.parentElement.nextElementSibling.textContent;
+				captureImageTitleAlt_imgSrc = el.src;
 
-			if (title || par) {
-				img_title = img.title ? img_title + `- ${title.textContent}` : title.textContent;
-				img_alt = `<p>${par.textContent}</p>::Pexels`;
+				appendModalCaptureTitleAlt(captureImageTitleAlt_imgSrc, captureImageTitleAlt_title, captureImageTitleAlt_altText);
+				toggleModalCaptureTitleAlt();
 
-				parentElement.children[0].setAttribute('title', img_title || 'Default Title');
-				parentElement.children[0].setAttribute('alt', img_alt);
-			}
-
+				// fetch(ajaxUrl, )
+			});
 		});
-	} else {
-		console.log('No images with class name of "catch-img-alt-title" has been found within the page.');
 	}
+
+	// To append the modal to the DOM
+	const appendModalCaptureTitleAlt = (imgSrc, title, altText) => {
+		const exisitingModal = document.getElementById('captureModalTitleAlt');
+
+		if (exisitingModal) {
+			exisitingModal.remove();
+		}
+
+		const modalCaptureTitleAlt = `
+			<div id="captureModalTitleAlt" class="captureModalTitleAlt">
+				<div class="modal-content">
+					<div class="close-modal">
+						<span id="closeCaptureModalTitleAlt" class="close">&times;</span>
+					</div>
+					<div id="modalContent">
+						<div>
+							<img src="${imgSrc}" alt="Default text">
+						</div>
+						<div>
+							<label for="captureTitleAlt-title">Title</label>
+							<input type="text" id="captureTitleAlt-title" name="captureTitleAlt-title" value = "${title}">
+						</div>
+						<div >
+							<label for="captureTitleAlt-alt-text">Alt Text</label>
+							<textarea id="captureTitleAlt-alt-text" name="captureTitleAlt-alt-text" rows="7" cols="50">
+							${altText}
+							</textarea>
+						</div>
+						<div>
+							<button class="captureImageTitleAltBtn">Save</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		`;
+
+		document.body.insertAdjacentHTML('beforeend', modalCaptureTitleAlt);
+	};
+
+	// To display the modal on button click
+	const toggleModalCaptureTitleAlt = () => {
+		const modalCaptureTitleAlt = document.getElementById('captureModalTitleAlt');
+		modalCaptureTitleAlt.style.display = 'block';
+	};
+
+	// Function to close the modal
+	const closeModalCaptureTitleAlt = () => {
+		document.getElementById('captureModalTitleAlt').style.display = 'none';
+	};
+
+	// To close the modal when clicked the close button or the overlay
+	document.addEventListener('click', (e) => {
+		if (e.target.id === 'closeCaptureModalTitleAlt') {
+			closeModalCaptureTitleAlt();
+		}
+
+		if (e.target.id === 'captureModalTitleAlt') {
+			closeModalCaptureTitleAlt();
+		}
+	});
+
 });

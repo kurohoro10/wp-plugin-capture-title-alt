@@ -1,3 +1,75 @@
 .wp-capture-alt-title-wrapper {
 	width: 100%;
 }
+
+button.captureImageTitleAltBtn {
+	border-radius: 5px;
+}
+
+.capture-image-title-alt {
+    position: absolute;
+    left: 47%;
+    opacity: 0.3;
+    box-shadow: 3px 3px 10px 0px #dedede;
+    transition: all ease-in-out 0.3s;
+}
+
+button.capture-image-title-alt:hover {
+	opacity: 1;
+}
+
+.captureModalTitleAlt {
+	display: none;
+	position: fixed;
+	z-index: 1000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.7);
+}
+
+.captureModalTitleAlt .modal-content {
+	background: #fefefe;
+	margin: 10% auto;
+	padding: 1.5rem 2rem;
+	border: 1px solid #888;
+	border-radius: 10px;
+	width: 40%;
+}
+
+.captureModalTitleAlt .modal-content img {
+	border-radius: 10px;
+	margin-bottom: 1rem;
+}
+
+.captureModalTitleAlt .close-modal {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.captureModalTitleAlt .close {
+	color: #aaa;
+	font-size: 20px;
+	font-weight: bold;
+	transition: color ease-in 0.3s;
+}
+
+.captureModalTitleAlt .close:hover,
+.captureModalTitleAlt .close:focus {
+	color: #2d2c2c;
+	cursor: pointer;
+}
+
+.captureModalTitleAlt div#modalContent {
+	color: #2d2c2c;
+}
+
+.captureModalTitleAlt #captureTitleAlt-title,
+.captureModalTitleAlt #captureTitleAlt-alt-text {
+	border-radius: 5px;
+    border: 1px solid #888;
+	margin-bottom: 1rem;
+	color: #2d2c2c!important;
+	text-transform: lowercase;
+}
