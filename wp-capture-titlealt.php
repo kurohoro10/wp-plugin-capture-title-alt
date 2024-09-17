@@ -34,3 +34,32 @@ function include_wp_captureAltTitle_admin_dashboard() {
 		require_once plugin_dir_path(__FILE__) . 'includes/admin-dashboard.php';
 	}
 }
+
+// add_action( 'init', 'fetch_all_published_posts' );
+
+// function fetch_all_published_posts() {
+// 	$args = array(
+// 		'post_type' => 'post',
+// 		'post_status' => 'publish',
+// 		'posts_per_page' => -1,
+// 		'ignore_sticky_posts' => true
+// 	);
+
+// 	$results = new WP_Query($args);
+
+// 	if ($results->have_posts()) {
+// 		$results->the_posts();
+
+// 		$post = $results->post;
+
+// 		$id = $post->ID;
+// 		$title = $post->post_title;
+// 		$content = $post->post_content;
+
+// 		print_r([
+// 			$id . '<br>',
+// 			$title . '<br>',
+// 			$content
+// 		]);
+// 	}
+// }
