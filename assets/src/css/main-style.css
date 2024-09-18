@@ -8,7 +8,7 @@ button.captureImageTitleAltBtn {
 
 .capture-image-title-alt {
     position: absolute;
-    left: 47%;
+    left: 48%;
     opacity: 0.3;
     box-shadow: 3px 3px 10px 0px #dedede;
     transition: all ease-in-out 0.3s;
@@ -31,21 +31,28 @@ button.capture-image-title-alt:hover {
 
 .captureModalTitleAlt .modal-content {
 	background: #fefefe;
-	margin: 10% auto;
+	margin: 5% auto;
 	padding: 1.5rem 2rem;
 	border: 1px solid #888;
 	border-radius: 10px;
-	width: 40%;
+	width: 25%;
 }
 
 .captureModalTitleAlt .modal-content img {
 	border-radius: 10px;
 	margin-bottom: 1rem;
+	max-width: 430px;
 }
 
 .captureModalTitleAlt .close-modal {
 	display: flex;
 	justify-content: flex-end;
+}
+
+.captureModalTitleAlt button#closeCaptureModalTitleAlt {
+	background: transparent;
+    padding: 0;
+    padding-bottom: 1rem;
 }
 
 .captureModalTitleAlt .close {

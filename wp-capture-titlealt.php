@@ -40,27 +40,102 @@ function include_wp_captureAltTitle_admin_dashboard() {
 	}
 }
 
-add_action( 'init', 'fetch_all_published_posts' );
+add_action('wp_ajax_get_post_id_by_parent', 'get_post_id_by_parent_callback');
 
-function fetch_all_published_posts() {
-	$args = array(
-		'post_type' => 'post',
-		'post_status' => 'publish',
-		'posts_per_page' => -1,
-		'ignore_sticky_posts' => true
-	);
+function get_post_id_by_parent_callback() {
+	global $wpdb;
+	if (!isset($_GET['nonce']) || !wp_verify_nonce($_GET['nonce'], 'wpCaptureAltTitle')) {
+		wp_send_json_error('Invalid nonce');
+	}
 
-	$results = new WP_Query($args);
+	$parent_id = isset($_GET['parent_id']) ? intval($_GET['parent_id']) : 0;
+	$post_title = isset($_GET['post_title']) ? sanitize_text_field($_GET['post_title']) : '';
 
-	if ($results->have_posts()) {
-		$results->the_posts();
+	if (!$parent_id) {
+		wp_send_json_error('Invalid parent ID');
+	}
 
-		$post = $results->post;
+	if (!$post_title) {
+		wp_send_json_error('Invalid post title');
+	}
 
-		$id = $post->ID;
-		$title = $post->post_title;
-		$content = $post->post_content;
+	// $result = $wpdb->get_row($wpdb->prepare(
+	// 	"SELECT ID FROM $wpdb->posts WHERE post_id = %d AND post_title = %s LIMIT 1", $parent_id, $post_title
+	// ));
 
+	// if ($result) {
+	// 	wp_send_json_success(array('post_id' => $result->ID));
+	// 	error_log($result);
+	// } else {
+	// 	error_log('No posts found for parent ID: ' . $parent_id);
+	// 	wp_send_json_error('Post ID not found for the given parent ID');
+	// }
 
+	$query = new WP_Query(array(
+		'p' => $parent_id,
+		'post_title' => $post_title,
+		'post_type' => 'any',
+		'posts_per_page' => 1
+	));
+
+	if ($query->have_posts()) {
+		$post_id = $query->posts[0]->ID;
+		wp_send_json_success(array('post_id' => $post_id));
+		return $post_id;
+	} else {
+		wp_send_json_error('Post ID not found for the given parent ID');
+	}
+}
+
+add_action( 'wp_ajax_save_image_title_alt', 'wp_captureAltTitle_update_image_attributes' );
+
+function wp_captureAltTitle_update_image_attributes() {
+	if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'wpCaptureAltTitle')) {
+		error_log('Invalid nonce detected.');
+		wp_send_json_error('Invalid nonce');
+		return;
+	}
+
+	$post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+	if (!current_user_can('edit_post', $post_id)) {
+		wp_send_json_error('You do not have the permission to edit this post.');
+		return;
+	}
+
+	$image_src = isset($_POST['image_src']) ? esc_url_raw($_POST['image_src']) : '';
+	$title = isset($_POST['title']) ? sanitize_text_field($_POST['title']) : '';
+	$alt_text = isset($_POST['alt_text']) ? sanitize_text_field($_POST['alt_text']) : '';
+
+	$post_content = get_post_field('post_content', $post_id);
+
+	preg_match_all('/<img [^>]+>/', $post_content, $matches);
+
+	if (!empty($matches[0])) {
+		foreach($matches[0] as $img_tag) {
+			if (strpos($img_tag, $image_src) !== false) {
+				if(!preg_match('/title="([^"]*)"/', $img_tag)) {
+					$new_img_tag = preg_replace('/<img/', '<img title="' . esc_attr($title) . '"', $img_tag, 1);
+				} else {
+					$new_img_tag = preg_replace('/title="([^"]*)"/', 'title="' . esc_attr($title) . '"', $img_tag, 1);
+				}
+
+				if (!preg_match('/alt="([^"]*)"/', $img_tag)) {
+					$new_img_tag = preg_replace('/<img/', '<img alt = "&lt;p&gt;' . esc_attr($alt_text) . '&lt;/p&gt;::Pexels"', $img_tag, 1);
+				} else {
+					$new_img_tag = preg_replace('/alt=([^"]*)/', 'alt="&lt;p&gt;' . esc_attr($alt_text) . '&lt;/p&gt;::Pexels"', $new_img_tag, 1);
+				}
+
+				$post_content = str_replace($img_tag, $new_img_tag, $post_content);
+			}
+		}
+
+		wp_update_post(array(
+			'ID' =>$post_id,
+			'post_content' => $post_content
+		));
+
+		wp_send_json_success('Image attributes updated successfully.');
+	} else {
+		wp_send_json_error('No image found in the post.');
 	}
 }
