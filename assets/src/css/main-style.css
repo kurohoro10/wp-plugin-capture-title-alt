@@ -91,6 +91,11 @@ button.capture-image-title-alt:hover {
 	color: var(--wp-capture-title-alt-modal);
 }
 
+.captureModalTitleAlt div#modalContent div:first-child {
+	display: flex;
+	justify-content: center;
+}
+
 .captureModalTitleAlt #captureTitleAlt-title,
 .captureModalTitleAlt #captureTitleAlt-alt-text {
     border: 1px solid var(--wp-capture-title-alt-border);
