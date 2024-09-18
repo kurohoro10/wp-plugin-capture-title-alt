@@ -19,8 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
             el.parentElement.append(btn);
 
             btn.addEventListener('click', () => {
-                // captureImageTitleAlt_title = captureImageTitleAlt_title ? el.title : el.parentElement.previousElementSibling.textContent;
-                // captureImageTitleAlt_altText = captureImageTitleAlt_altText ? el.alt : el.parentElement.nextElementSibling.textContent;
                 captureImageTitleAlt_imgSrc = el.src;
 
 				if (el.title) {
@@ -30,9 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 
 				if (el.alt) {
-					captureImageTitleAlt_altText = el.alt;
+					captureImageTitleAlt_altText = `&lt;p&gt;${el.alt}&lt;/p&gt;::Pexels`;
 				} else {
-					captureImageTitleAlt_altText = el.parentElement.nextElementSibling.textContent;
+					captureImageTitleAlt_altText = `&lt;p&gt;${el.parentElement.nextElementSibling.textContent}&lt;/p&gt;::Pexels`;
 				}
 
                 const article = el.closest('article');
@@ -55,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 savebutton.addEventListener('click', () => {
                                     const newTitle = document.getElementById('captureTitleAlt-title').value;
                                     const newAltText = document.getElementById('captureTitleAlt-alt-text').value;
+									console.log(newAltText);
 
                                     fetch(pluginUrl, {
                                         method: 'POST',

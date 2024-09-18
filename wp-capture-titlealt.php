@@ -120,9 +120,9 @@ function wp_captureAltTitle_update_image_attributes() {
 				}
 
 				if (!preg_match('/alt="([^"]*)"/', $img_tag)) {
-					$new_img_tag = preg_replace('/<img/', '<img alt = "&lt;p&gt;' . esc_attr($alt_text) . '&lt;/p&gt;::Pexels"', $img_tag, 1);
+					$new_img_tag = preg_replace('/<img/', '<img alt = "' . esc_attr($alt_text) . '"', $img_tag, 1);
 				} else {
-					$new_img_tag = preg_replace('/alt=([^"]*)/', 'alt="&lt;p&gt;' . esc_attr($alt_text) . '&lt;/p&gt;::Pexels"', $new_img_tag, 1);
+					$new_img_tag = preg_replace('/alt=([^"]*)/', 'alt="' . esc_attr($alt_text) . '"', $new_img_tag, 1);
 				}
 
 				$post_content = str_replace($img_tag, $new_img_tag, $post_content);
