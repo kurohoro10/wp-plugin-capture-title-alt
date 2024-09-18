@@ -7,7 +7,7 @@
  * Author URI:
  * Text Domain:     wp-capture-titlealt
  * Domain Path:     /languages
- * Version:         0.2.2
+ * Version:         0.2.3
  *
  * @package         Wp_Capture_Titlealt
  */
@@ -111,34 +111,34 @@ function wp_captureAltTitle_update_image_attributes() {
 	preg_match_all('/<img [^>]+>/', $post_content, $matches);
 
 	if (!empty($matches[0])) {
-		foreach($matches[0] as $img_tag) {
+		foreach ($matches[0] as $img_tag) {
 			if (strpos($img_tag, $image_src) !== false) {
-				if(!preg_match('/title="([^"]*)"/', $img_tag)) {
+				// Update title attribute
+				if (!preg_match('/title="([^"]*)"/', $img_tag)) {
 					$new_img_tag = preg_replace('/<img/', '<img title="' . esc_attr($title) . '"', $img_tag, 1);
 				} else {
 					$new_img_tag = preg_replace('/title="([^"]*)"/', 'title="' . esc_attr($title) . '"', $img_tag, 1);
 				}
 
+				// Update alt attribute
 				if (!preg_match('/alt="([^"]*)"/', $img_tag)) {
-					if ($alt_text === '') {
-						$new_img_tag = preg_replace('/<img/', '<img alt = "' . esc_attr($alt_text) . '"', $img_tag, 1);
-					} elseif (!preg_match('/<p>.*<\/p>::Pexels/', $alt_text)) {
-						$new_img_tag = preg_replace('/<img/', '<img alt = "&lt;pgt;' . esc_attr($alt_text) . '&lt;/p&gt;::Pexels"', $img_tag, 1);
+					// Only add alt if not empty
+					if (!empty($alt_text)) {
+						$new_img_tag = preg_replace('/<img/', '<img alt="' . esc_attr($alt_text) . '"', $new_img_tag, 1);
 					}
 				} else {
-					if ($alt_text === '') {
-						$new_img_tag = preg_replace('/alt=([^"]*)/', 'alt="' . esc_attr($alt_text) . '"', $img_tag, 1);
-					} elseif (!preg_match('/<p>.*<\/p>::Pexels/', $alt_text)) {
-						$new_img_tag = preg_replace('/alt=([^"]*)/', 'alt="&lt;p&gt;' . esc_attr($alt_text) . '&lt;/p&gt;::Pexels"', $img_tag, 1);
-					}
+					// Replace alt text if it's non-empty
+					$new_img_tag = preg_replace('/alt="([^"]*)"/', 'alt="' . esc_attr($alt_text) . '"', $new_img_tag, 1);
 				}
 
+				// Replace old img tag with new img tag in post content
 				$post_content = str_replace($img_tag, $new_img_tag, $post_content);
 			}
 		}
 
+		// Update the post with new content
 		wp_update_post(array(
-			'ID' =>$post_id,
+			'ID' => $post_id,
 			'post_content' => $post_content
 		));
 

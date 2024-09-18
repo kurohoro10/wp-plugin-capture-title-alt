@@ -52,9 +52,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 const savebutton = document.getElementById('captureImageTitleAltBtn-save');
                                 savebutton.addEventListener('click', () => {
-                                    const newTitle = document.getElementById('captureTitleAlt-title').value;
-                                    const newAltText = document.getElementById('captureTitleAlt-alt-text').value;
+                                    let newTitle = document.getElementById('captureTitleAlt-title').value;
+                                    let newAltText = document.getElementById('captureTitleAlt-alt-text').value;
 									const errMsg = document.getElementById('wpCaptureTitleAlt-capture-error-message');
+
+									if (newAltText !== '') {
+										if (newAltText.includes('::Pexels')) {
+											newAltText = newAltText.replace('::Pexels', '');
+											newAltText = `&lt;p&gt;${newAltText}&lt;/p&gt;::Pexels`;
+										} else {
+											newAltText = `&lt;p&gt;${newAltText}&lt;/p&gt;::Pexels`;
+										}
+									}
 
 									savebutton.classList.add('wp-capture-title-alt-loading');
 									savebutton.textContent = 'Saving...';
@@ -82,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
 											setTimeout(() => {
 												closeModalCaptureTitleAlt();
 												savebutton.classList.remove('wp-capture-title-alt-loading');
+												// document.location.reload();
 											}, 1000)
 
                                         } else {
