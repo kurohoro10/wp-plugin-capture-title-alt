@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.classList.add('capture-image-title-alt', 'captureImageTitleAltBtn');
             btn.textContent = 'Capture Alt Title';
 
-            el.parentElement.append(btn);
+			el.parentElement.style.position = 'relative';
+			el.parentElement.append(btn);
 
             btn.addEventListener('click', () => {
                 captureImageTitleAlt_imgSrc = el.src;
@@ -28,9 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 
 				if (el.alt) {
-					captureImageTitleAlt_altText = `&lt;p&gt;${el.alt}&lt;/p&gt;::Pexels`;
+					captureImageTitleAlt_altText = el.alt;
 				} else {
-					captureImageTitleAlt_altText = `&lt;p&gt;${el.parentElement.nextElementSibling.textContent}&lt;/p&gt;::Pexels`;
+					captureImageTitleAlt_altText = el.parentElement.nextElementSibling.textContent;
 				}
 
                 const article = el.closest('article');
@@ -53,7 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
                                 savebutton.addEventListener('click', () => {
                                     const newTitle = document.getElementById('captureTitleAlt-title').value;
                                     const newAltText = document.getElementById('captureTitleAlt-alt-text').value;
-									console.log(newAltText);
+									const errMsg = document.getElementById('wpCaptureTitleAlt-capture-error-message');
+
+									savebutton.classList.add('wp-capture-title-alt-loading');
+									savebutton.textContent = 'Saving...';
 
                                     fetch(pluginUrl, {
                                         method: 'POST',
@@ -72,14 +76,25 @@ document.addEventListener('DOMContentLoaded', () => {
                                     .then(response => response.json())
                                     .then(data => {
                                         if (data.success) {
+											if (!errMsg.classList.contains('hide-error-message')) errMsg.classList.add('hide-error-message');
                                             console.log('Image title and alt text updated successfully!');
-                                            closeModalCaptureTitleAlt();
+											savebutton.textContent = 'Saved';
+											setTimeout(() => {
+												closeModalCaptureTitleAlt();
+												savebutton.classList.remove('wp-capture-title-alt-loading');
+											}, 1000)
+
                                         } else {
+											if (errMsg.classList.contains('hide-error-message')) errMsg.classList.remove('hide-error-message');
+											errMsg.textContent = 'Failed to update image title and alt text.';
                                             console.log('Failed to update image title and alt text.');
+											savebutton.classList.remove('wp-capture-title-alt-loading');
                                         }
                                     })
                                     .catch(error => {
-                                        console.log('Error', error);
+										if (errMsg.classList.contains('hide-error-message')) errMsg.classList.remove('hide-error-message');
+										errMsg.textContent = 'Error: ' + error.message;
+                                        console.log('Error', error.message);
                                     });
                                 });
                             } else {
@@ -108,6 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="modal-content">
                     <div class="close-modal">
                         <button id="closeCaptureModalTitleAlt" class="close" aria-label="Close modal">&times;</button>
+                    </div>
+					<div id="wpCaptureTitleAlt-capture-error-message" class="hide-error-message">
+                        <p>Error.</p>
                     </div>
                     <div id="modalContent">
                         <div>
