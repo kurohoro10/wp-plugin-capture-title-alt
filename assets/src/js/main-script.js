@@ -32,7 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
 				if (el.alt) {
 					captureImageTitleAlt_altText = el.alt;
 				} else {
-					captureImageTitleAlt_altText = el.parentElement.nextElementSibling.textContent;
+					let nextPElement = el.parentElement.nextElementSibling;
+
+					while (nextPElement && nextPElement.tagName !== 'P') {
+						nextPElement = nextPElement.nextElementSibling;
+					}
+
+					captureImageTitleAlt_altText = nextPElement ? nextPElement.textContent : '';
 				}
 
 				if (captureImageTitleAlt_altText.includes('::')) {
