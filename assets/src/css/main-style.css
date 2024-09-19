@@ -13,7 +13,7 @@
 	width: 100%;
 }
 
-button.captureImageTitleAltBtn, .captureModalTitleAlt .modal-content, .captureModalTitleAlt .modal-content img, .capture-error-message, .captureModalTitleAlt #captureTitleAlt-title, .captureModalTitleAlt #captureTitleAlt-alt-text  {
+button.captureImageTitleAltBtn, .captureModalTitleAlt .modal-content, .captureModalTitleAlt .modal-content img, .capture-error-message, .captureModalTitleAlt #captureTitleAlt-title, .captureModalTitleAlt #captureTitleAlt-alt-text, #captureTitleAlt-extension  {
 	border-radius: 5px;
 }
 
@@ -89,6 +89,7 @@ button.capture-image-title-alt:hover {
 
 .captureModalTitleAlt div#modalContent {
 	color: var(--wp-capture-title-alt-modal);
+	padding-bottom: 2rem;
 }
 
 .captureModalTitleAlt div#modalContent div:first-child {
@@ -97,11 +98,12 @@ button.capture-image-title-alt:hover {
 }
 
 .captureModalTitleAlt #captureTitleAlt-title,
-.captureModalTitleAlt #captureTitleAlt-alt-text {
+.captureModalTitleAlt #captureTitleAlt-alt-text,
+.captureModalTitleAlt #captureTitleAlt-extension {
     border: 1px solid var(--wp-capture-title-alt-border);
 	margin-bottom: 1rem;
 	color: var(--wp-capture-title-alt-modal);
-	text-transform: lowercase;
+	text-transform: none;
 }
 
 .wp-capture-title-alt-loading {

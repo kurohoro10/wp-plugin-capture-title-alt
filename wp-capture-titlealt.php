@@ -7,7 +7,7 @@
  * Author URI:
  * Text Domain:     wp-capture-titlealt
  * Domain Path:     /languages
- * Version:         0.2.3
+ * Version:         0.3.1
  *
  * @package         Wp_Capture_Titlealt
  */
@@ -58,18 +58,6 @@ function get_post_id_by_parent_callback() {
 	if (!$post_title) {
 		wp_send_json_error('Invalid post title');
 	}
-
-	// $result = $wpdb->get_row($wpdb->prepare(
-	// 	"SELECT ID FROM $wpdb->posts WHERE post_id = %d AND post_title = %s LIMIT 1", $parent_id, $post_title
-	// ));
-
-	// if ($result) {
-	// 	wp_send_json_success(array('post_id' => $result->ID));
-	// 	error_log($result);
-	// } else {
-	// 	error_log('No posts found for parent ID: ' . $parent_id);
-	// 	wp_send_json_error('Post ID not found for the given parent ID');
-	// }
 
 	$query = new WP_Query(array(
 		'p' => $parent_id,

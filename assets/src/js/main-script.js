@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let captureImageTitleAlt_title;
     let captureImageTitleAlt_altText;
     let captureImageTitleAlt_imgSrc;
+	let captureImageTitleAlt_extension;
 
     if (userRoleforCaptureTitleAlt === 'administrator') {
         const captureImgs = document.querySelectorAll('main.content img');
@@ -34,6 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
 					captureImageTitleAlt_altText = el.parentElement.nextElementSibling.textContent;
 				}
 
+				if (captureImageTitleAlt_altText.includes('::')) {
+					captureImageTitleAlt_extension = captureImageTitleAlt_altText.split('::')[1];
+				} else {
+					captureImageTitleAlt_extension = 'Pexels';
+				}
+
                 const article = el.closest('article');
                 const postParentmatch = article.className.match(/post-(\d+)/);
                 const postParentId = postParentmatch ? postParentmatch[1] : null;
@@ -47,22 +54,35 @@ document.addEventListener('DOMContentLoaded', () => {
                                 appendModalCaptureTitleAlt(
 									captureImageTitleAlt_imgSrc,
 									captureImageTitleAlt_title,
-									captureImageTitleAlt_altText);
+									captureImageTitleAlt_altText,
+									captureImageTitleAlt_extension
+								);
                                 toggleModalCaptureTitleAlt();
+
+								// Make the modal scrollable if max-height exceed 100vh
+								const mkModalScrollable = document.querySelector('#captureModalTitleAlt .modal-content');
+								const viewportHeight = window.innerHeight;
+
+								if (mkModalScrollable.offsetHeight > viewportHeight) {
+									mkModalScrollable.style.overflowY = 'scroll';
+									mkModalScrollable.style.maxHeight = '100vh';
+								}
 
                                 const savebutton = document.getElementById('captureImageTitleAltBtn-save');
                                 savebutton.addEventListener('click', () => {
                                     let newTitle = document.getElementById('captureTitleAlt-title').value;
                                     let newAltText = document.getElementById('captureTitleAlt-alt-text').value;
+									let extension = document.getElementById('captureTitleAlt-extension').value;
 									const errMsg = document.getElementById('wpCaptureTitleAlt-capture-error-message');
 
 									if (newAltText !== '') {
-										if (newAltText.includes('::Pexels')) {
-											newAltText = newAltText.replace('::Pexels', '');
-											newAltText = `&lt;p&gt;${newAltText}&lt;/p&gt;::Pexels`;
-										} else {
-											newAltText = `&lt;p&gt;${newAltText}&lt;/p&gt;::Pexels`;
+										let doubleColonIndex = newAltText.indexOf('::');
+
+										if (doubleColonIndex !== -1) {
+											newAltText = newAltText.substring(0, doubleColonIndex);
 										}
+
+										newAltText = `&lt;p&gt;${newAltText}&lt;/p&gt;::${extension}`
 									}
 
 									savebutton.classList.add('wp-capture-title-alt-loading');
@@ -121,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const appendModalCaptureTitleAlt = (imgSrc, title, altText) => {
+    const appendModalCaptureTitleAlt = (imgSrc, title, altText, extension) => {
         const existingModal = document.getElementById('captureModalTitleAlt');
 
         if (existingModal) {
@@ -148,6 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div>
                             <label for="captureTitleAlt-alt-text">Alt Text</label>
                             <textarea id="captureTitleAlt-alt-text" name="captureTitleAlt-alt-text" rows="7" cols="50">${altText}</textarea>
+                        </div>
+						<div>
+                            <label for="captureTitleAlt-extension">Extension</label>
+                            <input type="text" id="captureTitleAlt-extension" name="captureTitleAlt-extension" value="${extension}" placeholder="alt text without '::'">
                         </div>
                         <div>
                             <button id="captureImageTitleAltBtn-save" class="captureImageTitleAltBtn">Save</button>
