@@ -7,7 +7,7 @@
  * Author URI:
  * Text Domain:     wp-capture-titlealt
  * Domain Path:     /languages
- * Version:         0.3.2
+ * Version:         3.3.1
  *
  * @package         Wp_Capture_Titlealt
  */

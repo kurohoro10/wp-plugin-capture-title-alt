@@ -74,6 +74,7 @@ function wp_captureAltTitle_page() {
 				<li>* Extension not saving when I edited it in the alt text field: Extension in the alt text field is read only so it's not going to save the extension even if you save the alt text. You can use the dedicated field for the extension if you want to save the extension you added.</li>
 				<li>* Do I manually need to add the heading and paragraph?: You do not need to manually add headings and paragraph just clear the fields then save and reload the page, once you open the popup again you will see that it's populated with the nearest title and paragraph then just hit save to save the the title and alt text together with the extension.</li>
 				<li>* Extension is not saving when I clear the alt text field and hit the save button : Extension will only be saved if there is alt text so it cannot be added when there is none.</li>
+				<li>* I just updated one image title and alt text but it's not appearing : You need to reload the page for it to appear.</li>
 			</ul>
 			<p>This plugin makes it easy to manage your website’s image details without needing to dig into the backend or code. Just log in, click the button, and edit your image details.</p>
 		</div>
