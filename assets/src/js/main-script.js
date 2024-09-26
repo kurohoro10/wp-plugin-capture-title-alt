@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				if (el.title) {
 					captureImageTitleAlt_title = el.title;
-				} else {
+				} else if(!el.title) {
 					captureImageTitleAlt_title = el.parentElement.previousElementSibling.textContent;
 				}
 
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 											newAltText = newAltText.substring(0, doubleColonIndex);
 										}
 
-										newAltText = `&lt;p&gt;${newAltText}&lt;/p&gt;::${extension}`
+										newAltText = `&lt;p&gt;${newAltText}&lt;/p&gt;&nbsp;::&nbsp;${extension}`
 									}
 
 									savebutton.classList.add('wp-capture-title-alt-loading');
